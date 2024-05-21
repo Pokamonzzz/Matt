@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
     /// </summary>
     Collectible currentCollectible;
 
+    Interactable currentInteractable;
+
     /// <summary>
     /// This willl store the text object in the scene
     /// </summary>
@@ -118,6 +120,11 @@ public class Player : MonoBehaviour
     void EndGame()
     {
         EndingScreen.SetActive(false);
+    }
+
+    public void UpdateInteractable(Interactable newInteractable)
+    {
+        currentInteractable = newInteractable;
     }
 
     public void UpdateDoor(Door newDoor)

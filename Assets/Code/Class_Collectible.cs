@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Class_Collectible : MonoBehaviour
+public class Class_Collectible : Interactable
 {
     //bool isCollected = false;
     //float expirationTime = 5.5f;
@@ -71,13 +71,20 @@ public class Class_Collectible : MonoBehaviour
         Destroy(gameObject);
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        // both are true then collision will happen
+        if (collision.gameObject.tag == "Player" && gameObject.tag == "Coin")
+        {
+            collision.gameObject.GetComponent<Player>().IncreaseScore(coin);
+            Collected();
+        }
+        /// <summary>
+        /// Increase score is from player.cs cause i make it to public
+        /// </summary>
+        /// <param name="collision"></param>
 
-    /// <summary>
-    /// Increase score is from player.cs cause i make it to public
-    /// </summary>
-    /// <param name="collision"></param>
-
-    private void OnCollisionExit(Collision collision)
+        private void OnCollisionExit(Collision collision)
     {
         Debug.Log("the Collision stopped");
     }

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Collectible : MonoBehaviour
+public class Collectible : Interactable
 {
 
     public int coin = 1;
