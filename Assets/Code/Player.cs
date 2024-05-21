@@ -147,6 +147,10 @@ public class Player : MonoBehaviour
     /// </summary>
     void OnInteract()
     {
+        if(currentInteractable != null)
+        {
+            currentInteractable.Interact(this);
+        }
         // Check if its null
         if (currentDoor != null)
         {
