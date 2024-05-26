@@ -65,26 +65,12 @@ public class Class_Collectible : Interactable
   //}
 
 
-    void Collected()
-    {
-        Debug.Log(gameObject.name + " got HIT");
-        Destroy(gameObject);
-    }
+    /// <summary>
+    /// Increase score is from player.cs cause i make it to public
+    /// </summary>
+    /// <param name="collision"></param>
 
-    void OnCollisionEnter(Collision collision)
-    {
-        // both are true then collision will happen
-        if (collision.gameObject.tag == "Player" && gameObject.tag == "Coin")
-        {
-            collision.gameObject.GetComponent<Player>().IncreaseScore(coin);
-            Collected();
-        }
-        /// <summary>
-        /// Increase score is from player.cs cause i make it to public
-        /// </summary>
-        /// <param name="collision"></param>
-
-        private void OnCollisionExit(Collision collision)
+    private void OnCollisionExit(Collision collision)
     {
         Debug.Log("the Collision stopped");
     }

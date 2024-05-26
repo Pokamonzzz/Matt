@@ -7,8 +7,9 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using StarterAssets;
 
-public class Collectible : Interactable
+public class Collectible : MonoBehaviour
 {
 
     public int coin = 1;
@@ -23,11 +24,12 @@ public class Collectible : Interactable
     /// <summary>
     /// The collection function
     /// </summary>
-    public void Collected()
+    public virtual void Collected()
     {
         Debug.Log(gameObject.name + " got HIT");
         Destroy(gameObject);
     }
+
 
     /// <summary>
     /// Increase score is from player.cs cause i make it to public
@@ -36,11 +38,11 @@ public class Collectible : Interactable
     void OnCollisionEnter(Collision collision)
     {
         // both are true then collision will happen
-        if (collision.gameObject.tag == "Player" && gameObject.tag == "Coin")
-        {
-            collision.gameObject.GetComponent<Player>().IncreaseScore(coin);
-            Collected();
-        }
+      //if (collision.gameObject.tag == "Player" && gameObject.tag == "Coin")
+      //{
+      //    collision.gameObject.GetComponent<Player>().IncreaseScore(coin);
+      //    Collected();
+      //}
 
         // both are true then collision will happen
         if (collision.gameObject.tag == "Player" && gameObject.tag == "Ball")
@@ -66,6 +68,18 @@ public class Collectible : Interactable
         }
     }
 
+
+
+    // CA2
+    public void AddSpeed(Collider other)
+    {
+        other.gameObject.GetComponent<FirstPersonController>().MoveSpeed = 20f;
+    }
+
+    public void AddJump(Collider other)
+    {
+        other.gameObject.GetComponent<FirstPersonController>().JumpHeight = 5f;
+    }
 
     // Start is called before the first frame update
     void Start()
