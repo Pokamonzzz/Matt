@@ -7,6 +7,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -14,7 +15,7 @@ public class Player : MonoBehaviour
     /// <summary>
     /// The current score
     /// </summary>
-    public int currentScore = 0;
+    //public int currentScore = 0;
     public int starNum = 0;
     // Make Public so other c# can use
 
@@ -32,28 +33,31 @@ public class Player : MonoBehaviour
 
     Interactable currentInteractable;
 
+    GiftBox currentGift;
+
     /// <summary>
     /// This willl store the text object in the scene
     /// </summary>
-    public TextMeshProUGUI scoreText;
+    // moved to Game manager 
+    //public TextMeshProUGUI scoreText;
 
     public GameObject textBox;
 
     public TextMeshProUGUI starText;
 
     /// <summary>
-    /// Increase the score of the player by however much i chose.
+    /// Increase the score of the player by however much i chose. 
     /// </summary>
     /// <param name="scoreToAdd"></param>
-    public void IncreaseScore(int scoreToAdd)
-    {
-        currentScore += scoreToAdd;
-        Debug.Log(currentScore);
-
-        // scoreText is the variable the .text is the ui text. to string is to make an integer to a string.
-
-        scoreText.text = currentScore.ToString();
-    }
+  //public void IncreaseScore(int scoreToAdd)
+  //{
+  //    currentScore += scoreToAdd;
+  //    Debug.Log(currentScore);
+  //
+  //    // scoreText is the variable the .text is the ui text. to string is to make an integer to a string.
+  //
+  //    scoreText.text = currentScore.ToString();
+  //}
     /// <summary>
     /// Increase th number of stars needed to be collected or how many are left
     /// </summary>
@@ -122,10 +126,10 @@ public class Player : MonoBehaviour
         EndingScreen.SetActive(false);
     }
 
-    public void UpdateInteractable(Interactable newInteractable)
-    {
-        currentInteractable = newInteractable;
-    }
+  //public void UpdateInteractable(Interactable newInteractable)
+  //{
+  //    currentInteractable = newInteractable;
+  //}
 
     public void UpdateDoor(Door newDoor)
     {
@@ -166,23 +170,62 @@ public class Player : MonoBehaviour
         // collect the coin on click with the interact key
         if (currentCollectible != null)
         {
-            IncreaseScore(currentCollectible.currentScore);
+            //IncreaseScore(currentCollectible.currentScore);
             currentCollectible.Collected();
-        
+        }
+        if (currentGift != null)
+        {
+            currentGift.collectGift();
         }
 
     }
 
+    // CA3
+    [SerializeField]
+    Transform playerCamera;
 
+    [SerializeField]
+    float interactionDistance;
 
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    TextMeshProUGUI interactionText;
+
+    private void Update()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        Debug.DrawLine(playerCamera.position, playerCamera.position + (playerCamera.forward * interactionDistance), Color.red);
+        RaycastHit hitInfo;
+        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hitInfo, interactionDistance))
+        {
+            // print out the name of whatever my ray hit
+            Debug.Log(hitInfo.transform.name);
+            // shd be <interactable> out currentInteractable but i dont have anything set to the interactable.
+            // for door to turn need change it to <Door>(out currentDoor)
+            // why is the UI not showing up???
+            if (hitInfo.transform.TryGetComponent<GiftBox>(out currentGift))
+            {
+                //Display some interation text
+                interactionText.gameObject.SetActive(true);
+            }
+            else
+            {
+                currentInteractable = null;
+                interactionText.gameObject.SetActive(false);
+            }
+            if (hitInfo.transform.TryGetComponent<Collectible>(out currentCollectible))
+            {
+                //Display some interation text
+                interactionText.gameObject.SetActive(true);
+            }
+            else
+            {
+                currentInteractable = null;
+                interactionText.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            currentInteractable = null;
+            interactionText.gameObject.SetActive(false);
+        }
     }
 }

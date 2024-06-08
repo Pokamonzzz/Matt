@@ -5,10 +5,15 @@ using UnityEngine;
 public class Interactable : MonoBehaviour
 {
 
-    public void UpdatePlayerInteractable(Player thePlayer)
-    {
-        thePlayer.UpdateInteractable(this);
-    }
+  //public void UpdatePlayerInteractable(Player thePlayer)
+  //{
+  //    thePlayer.UpdateInteractable(this);
+  //}
+  //
+  //public void RemovePlayerInteractable(Player thePlayer)
+  //{
+  //    thePlayer.UpdateInteractable(null);
+  //}
 
     public void Interact(Player thePlayer)
     {

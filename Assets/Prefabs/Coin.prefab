@@ -121,11 +121,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51dd6b008e0238c428be1131ea1cec9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coin: 1
+  collectAudio: {fileID: 8300000, guid: f721825359f1967489389a9cfab44b26, type: 3}
   ball: 2
   star: 10
+  block: 57
   currentScore: 0
-  starText: {fileID: 0}
   starNum: 0
 --- !u!65 &7595463034788538533
 BoxCollider:

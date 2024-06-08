@@ -6,38 +6,43 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class Door : MonoBehaviour
 {
+    [SerializeField]
+    private AudioSource openAudio;
+
+
     bool opened = false;
 
     bool locked = false;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        //Check if the GameObject that enterted
-        //the Trigger has the "Player" tag
-        if (other.gameObject.tag == "Player" && !opened)
-        {
-            // Open the door
-            //OpenDoor();
-
-
-            // Update the player which the door its in front of
-            other.gameObject.GetComponent<Player>().UpdateDoor(this);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if(other.gameObject.tag == "Player")
-        {
-            // If player not in front of the door the door will not open
-            // Change to null to say the door is not there
-            other.gameObject.GetComponent<Player>().UpdateDoor(null);
-        }
-    }
+  //private void OnTriggerEnter(Collider other)
+  //{
+  //    //Check if the GameObject that enterted
+  //    //the Trigger has the "Player" tag
+  //    if (other.gameObject.tag == "Player" && !opened)
+  //    {
+  //        // Open the door
+  //        //OpenDoor();
+  //
+  //
+  //        // Update the player which the door its in front of
+  //        other.gameObject.GetComponent<Player>().UpdateDoor(this);
+  //    }
+  //}
+  //
+  //private void OnTriggerExit(Collider other)
+  //{
+  //    if(other.gameObject.tag == "Player")
+  //    {
+  //        // If player not in front of the door the door will not open
+  //        // Change to null to say the door is not there
+  //        other.gameObject.GetComponent<Player>().UpdateDoor(null);
+  //    }
+  //}
 
     /// <summary>
     /// Opening the door function
@@ -45,17 +50,23 @@ public class Door : MonoBehaviour
     public void OpenDoor()
     {
         // locked so that doors that does not need key cards can still open
-        if (!locked)
+        if (!locked && !opening)
         {
             // Handle the logic of opening the dorr
+            //Vector3 newRotation = transform.eulerAngles;
+            //newRotation.y += 90f;
+            //transform.eulerAngles = newRotation;
 
-            Vector3 newRotation = transform.eulerAngles;
-            newRotation.y += 90f;
-            transform.eulerAngles = newRotation;
-
+            //lerp
+            startRotation = transform.eulerAngles;
+            targetRotation = startRotation;
+            targetRotation.y += 90f;
+            Debug.Log("no");
 
             // opened = true makes the door not turn anymore
+            opening = true;
             opened = true;
+            openAudio.Play();
         }
 
     }
@@ -98,9 +109,37 @@ public class Door : MonoBehaviour
         
     }
 
+
+    /// <summary>
+    /// Lerp and time
+    /// </summary>
+    public float openDuration;
+
+    float currentDuration;
+
+    bool opening = false;
+
+    Vector3 startRotation;
+
+    Vector3 targetRotation;
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
-        
+        if (opening)
+        {
+            currentDuration += Time.deltaTime;
+            float t = currentDuration / openDuration;
+            transform.eulerAngles = Vector3.Lerp(startRotation, targetRotation, t);
+            
+            if (currentDuration >= openDuration)
+            {
+                currentDuration = 0f;
+                opening = false;
+                transform.eulerAngles = targetRotation;
+                opened = true;
+            }
+        }
     }
+
+
 }
